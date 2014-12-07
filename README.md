@@ -1,5 +1,5 @@
 Markov Chain Module
--------------------
+===================
 
 This is a really simple Markov chain module for bodies of text.  It offers a
 class that can train on bodies of text and then generate text based on its
@@ -7,7 +7,7 @@ model.  The command line interface allows for simple creation, training, and
 generation using text files and Pickle.
 
 Command Line Interface
-======================
+----------------------
 
 There are two flags for specifying markov chains:
 
@@ -25,7 +25,7 @@ operation just spits out words onto stdout.  You can specify how many words to
 generate using "-w".
 
 Examples
-========
+--------
 
 Create a new chain, train on "training.txt", and save as "markov1.pickle".
 
