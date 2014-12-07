@@ -76,7 +76,7 @@ class MarkovGenerator(object):
 def words(file):
     """Get words from a file."""
     for line in file.readlines():
-        for word in re.findall(r"[\w'-]+", line):
+        for word in re.findall(r"[a-zA-Z'-]+", line):
             word = word.strip("'-")
             if word:
                 yield word.lower()
