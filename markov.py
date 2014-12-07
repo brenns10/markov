@@ -53,14 +53,18 @@ class MarkovGenerator(object):
     """Iterator that generates text from a Markov Chain."""
 
     def __init__(self, markov_chain, start_word, count=None):
+        """Create a MarkovGenerator with a starting word and count."""
         self._markov = markov_chain
         self._previous = start_word
         self._count = count
 
     def __iter__(self):
+        """This is an iterator!"""
         return self
 
     def __next__(self):
+        """Generate and return a new word."""
+        # Stop after we have generated enough.
         if self._count is not None and self._count <= 0:
             raise StopIteration()
 
@@ -76,15 +80,21 @@ class MarkovGenerator(object):
 def words(file):
     """Get words from a file."""
     for line in file.readlines():
+        # Defines words as sequences of letters, hyphens, and apostrophes.  We
+        # want apostrophes because they could be part of contractions, and
+        # hyphens because they're in hyphenated words.
         for word in re.findall(r"[a-zA-Z'-]+", line):
+            # However, we do not want apostrophes or hyphens at the beginning
+            # or end.
             word = word.strip("'-")
             if word:
+                # Convert to lower case so that we are case insensitive.
                 yield word.lower()
 
 
 def main():
+    """Take arguments and perform their operations."""
     import argparse
-
     ap = argparse.ArgumentParser(description="train a Markov chain")
     ap.add_argument('-i', dest='in_markov', type=argparse.FileType('rb'),
                     default=None, help='input Markov chain')
