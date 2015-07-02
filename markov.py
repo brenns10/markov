@@ -44,9 +44,15 @@ class MarkovChain(object):
             self.train(last, curr)
             last = curr
 
-    def generate(self, count):
+    def generate(self, count, start=None):
         """Generate the given number of words."""
-        return MarkovGenerator(self, random.choice(list(self._states)), count)
+        if start is None:
+            start = random.choice(list(self._states))
+        elif start not in self._states:
+            import sys
+            print("error: %sd not in word list" % start, file=sys.stderr)
+            return
+        return MarkovGenerator(self, start, count)
 
 
 class MarkovGenerator(object):
@@ -106,6 +112,8 @@ def main():
                     default=False, help='generate to a file')
     ap.add_argument('-w', dest='words', type=int, default=100,
                     help='number of words to generate')
+    ap.add_argument('-s', dest='start', type=str, default=None,
+                    help='start word for generation')
     args = ap.parse_args()
 
     if args.in_markov is not None:
@@ -118,7 +126,14 @@ def main():
         markov.train_words(words(args.in_text))
 
     if args.out_text:
-        print(' '.join(list(w for w in markov.generate(args.words))))
+        if args.start is not None:
+            args.start = args.start.lower()
+
+        wordlist = list(markov.generate(args.words, args.start))
+
+        if args.start is not None:
+            wordlist.insert(0, args.start)
+        print(' '.join(wordlist))
 
     if args.out_markov is not None:
         pickle.dump(markov, args.out_markov)
